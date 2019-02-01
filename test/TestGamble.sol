@@ -12,7 +12,7 @@ contract TestGamble{
   Gamble newgamble = new Gamble(ILighthouse(address(newlighthouse)));
 
 // Give this test contract 5 ether to work with (sent from account[0] in ganache)
-  uint public initialBalance = 5 ether;
+  uint public initialBalance = 10 ether;
 
 // Create the value and nonce we will be writing into the lighthouse
   uint dataValue = 6;
@@ -45,7 +45,7 @@ contract TestGamble{
   function testSendEther() public{
 
 // Deposits 3 ether then checks to ensure deposit successful -- balance has ether
-     newgamble.deposit.value(3 ether)(address(this));
+     newgamble.deposit.value(7 ether)(address(this));
      uint balance = newgamble.checkBalance(address(this));
 
      Assert.isNotZero(balance, "No money in Gamble");
@@ -54,8 +54,8 @@ contract TestGamble{
 // Tests if there is exactly 3 ether deposited
    function testEtherAmount() public{
      uint balance = newgamble.checkBalance(address(this));
-     uint threeEther = 3 ether;
-     Assert.equal(balance, threeEther, "Did not deposit 3 Ether");
+     uint sevenEther = 7 ether;
+     Assert.equal(balance, sevenEther, "Did not deposit 7 Ether");
    }
 
 // Tests that this contract address is added to accounts array
@@ -83,15 +83,15 @@ contract TestGamble{
 
 // Sets up a gamble scenario where user loses. Checks successful ether transfer into toBet, and dice roll
    function testGamble() public{
-     newgamble.gamble(address(this), 1 ether, 5);
+     newgamble.gamble(address(this), 5 ether, 5);
 
      uint balance = newgamble.checkBalance(address(this));
      uint remainingEther = 2 ether;
      Assert.equal(balance, remainingEther, "Balances should have two ether after transfer");
 
      uint bet = newgamble.checkBet(address(this));
-     uint oneEther = 1 ether;
-     Assert.equal(bet, oneEther, "toBet does not have one ether");
+     uint fiveEther = 5 ether;
+     Assert.equal(bet, fiveEther, "toBet does not have five ether");
 
      uint chosenNumber = newgamble.checkNumber(address(this));
      uint five = 5;
@@ -135,7 +135,7 @@ contract TestGamble{
       Assert.equal(bet, zeroEther, "toBet should have lost its ether");
 
       uint balance = newgamble.checkBalance(address(this));
-      uint remainingEther = 2 ether;      //1 + 6
+      uint remainingEther = 7 ether;      //1 + 6
       Assert.equal(balance, remainingEther, "Balances ether amount incorrect");
     }
 

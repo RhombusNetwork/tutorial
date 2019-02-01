@@ -40,33 +40,37 @@ contract Gamble {
     function withdraw(address payable msgSender) public {
       uint amount = balances[msgSender];
       balances[msgSender] = 0;
-      msgSender.call.value(amount).gas(20000)("");    // fallback function logs withdraw in a storage write, requires 20000 gas
+
+      bool ok = false;
+      bytes memory mem;
+      (ok, mem) = msgSender.call.value(amount).gas(20000)("");    // fallback function logs withdraw in a storage write, requires 20000 gas
+      require(ok = true, "Transfer failed");
     }
 
 
 // Functions to display the internal state
-    function checkAccountLength() public returns(uint) {
+    function checkAccountLength() public view returns(uint) {
       return accounts.length;
     }
 
-    function checkNumAccounts() public returns(uint) {
+    function checkNumAccounts() public view returns(uint) {
       return numAccounts;
     }
 
-    function checkAccounts(uint index) public returns(address) {
+    function checkAccounts(uint index) public view returns(address) {
       require(index < 20, "No more than 20 accounts can be registered at a time");
       return accounts[index];
     }
 
-    function checkBalance(address msgSender) public returns(uint) {
+    function checkBalance(address msgSender) public view returns(uint) {
       return balances[msgSender];
     }
 
-    function checkBet(address msgSender) public returns(uint) {
+    function checkBet(address msgSender) public view returns(uint) {
       return toBet[msgSender];
     }
 
-    function checkNumber(address msgSender) public returns(uint) {
+    function checkNumber(address msgSender) public view returns(uint) {
       return chosenNumber[msgSender];
     }
 
