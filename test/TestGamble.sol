@@ -51,32 +51,28 @@ contract TestGamble{
      Assert.isNotZero(balance, "No money in Gamble");
    }
 
-// Tests if there is exactly 3 ether deposited
+// Tests if there is exactly 7 ether deposited
    function testEtherAmount() public{
      uint balance = newgamble.checkBalance(address(this));
-     uint sevenEther = 7 ether;
-     Assert.equal(balance, sevenEther, "Did not deposit 7 Ether");
+     Assert.equal(balance, 7 ether, "Did not deposit 7 Ether");
    }
 
 // Tests that this contract address is added to accounts array
    function testNumAccounts() public{
      uint NA = newgamble.checkNumAccounts();
-     uint one = 1;
-     Assert.equal(NA, one, "Number of accounts is not one");
+     Assert.equal(NA, 1, "Number of accounts is not one");
    }
 
    function testAccountRegister() public{
      uint index = (newgamble.checkNumAccounts() - 1);
      address ADDR = newgamble.checkAccounts(index);
-     address thisAddress = address(this);
-     Assert.equal(ADDR, thisAddress, "Incorrect address saved");
+     Assert.equal(ADDR, address(this), "Incorrect address saved");
    }
 
 // Tests that accounts array has a limit of 20 users
    function testAccountLength() public{
      uint accLen = newgamble.checkAccountLength();
-     uint actualLen = 20;
-     Assert.equal(accLen, actualLen, "Account Length is wrong");
+     Assert.equal(accLen, 20, "Account Length is wrong");
    }
 
 /* -------------------------------- Gamble tests ---------------------------- */
@@ -86,28 +82,23 @@ contract TestGamble{
      newgamble.gamble(address(this), 5 ether, 5);
 
      uint balance = newgamble.checkBalance(address(this));
-     uint remainingEther = 2 ether;
-     Assert.equal(balance, remainingEther, "Balances should have two ether after transfer");
+     Assert.equal(balance, 2 ether, "Balances should have two ether after transfer");
 
      uint bet = newgamble.checkBet(address(this));
-     uint fiveEther = 5 ether;
-     Assert.equal(bet, fiveEther, "toBet does not have five ether");
+     Assert.equal(bet, 5 ether, "toBet does not have five ether");
 
      uint chosenNumber = newgamble.checkNumber(address(this));
-     uint five = 5;
-     Assert.equal(chosenNumber, five, "Number selected is not 5");
+     Assert.equal(chosenNumber, 5, "Number selected is not 5");
    }
 
    function testDiceRoll() public{
      newgamble.diceRoll();
 
      uint bet = newgamble.checkBet(address(this));
-     uint zeroEther = 0 ether;
-     Assert.equal(bet, zeroEther, "toBet should have lost its ether");
+     Assert.equal(bet, 0 ether, "toBet should have lost its ether");
 
      uint balance = newgamble.checkBalance(address(this));
-     uint remainingEther = 2 ether;
-     Assert.equal(balance, remainingEther, "Balances ether amount changed");
+     Assert.equal(balance, 2 ether, "Balances ether amount changed");
    }
 
 // Sets up a winning gamble scenario like above
@@ -115,27 +106,23 @@ contract TestGamble{
      newgamble.gamble(address(this), 1 ether, 6);
 
      uint balance = newgamble.checkBalance(address(this));
-     uint remainingEther = 1 ether;
-     Assert.equal(balance, remainingEther, "Balances should have one ether after transfer");
+     Assert.equal(balance, 1 ether, "Balances should have one ether after transfer");
 
      uint bet = newgamble.checkBet(address(this));
-     uint oneEther = 1 ether;
-     Assert.equal(bet, oneEther, "toBet does not have one ether");
+     Assert.equal(bet, 1 ether, "toBet does not have one ether");
 
      uint chosenNumber = newgamble.checkNumber(address(this));
-     uint six = 6;
-     Assert.equal(chosenNumber, six, "Number selected is not 6");
+     Assert.equal(chosenNumber, 6, "Number selected is not 6");
    }
 
     function testDiceRollWin() public{
       newgamble.diceRoll();
 
       uint bet = newgamble.checkBet(address(this));
-      uint zeroEther = 0 ether;
-      Assert.equal(bet, zeroEther, "toBet should have lost its ether");
+      Assert.equal(bet, 0 ether, "toBet should have lost its ether");
 
       uint balance = newgamble.checkBalance(address(this));
-      uint remainingEther = 7 ether;      //1 + 6
+      uint remainingEther = 7 ether;      //1 from before + 6 from win
       Assert.equal(balance, remainingEther, "Balances ether amount incorrect");
     }
 
@@ -144,8 +131,7 @@ contract TestGamble{
       newgamble.withdraw(address(this));
 
       uint balance = newgamble.checkBalance(address(this));
-      uint remainingEther = 0 ether;
-      Assert.equal(balance, remainingEther, "Balances ether amount incorrect");
+      Assert.equal(balance, 0 ether, "Balances ether amount incorrect");
 
       Assert.isTrue(paid, "This test contract account was not paid");
       paid = false;
