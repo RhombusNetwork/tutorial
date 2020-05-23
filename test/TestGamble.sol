@@ -14,9 +14,6 @@ contract TestGamble{
 // Give this test contract 5 ether to work with (sent from account[0] in ganache)
   uint public initialBalance = 10 ether;
 
-// Create the value and nonce we will be writing into the lighthouse
-  uint dataValue = 6;
-  uint nonce = 1234;
 // Global variable to track successful ether withdraw from Gamble
   bool paid = false;
 
@@ -24,21 +21,80 @@ contract TestGamble{
     paid = true;    // Logs successful withdraw
   }
 
-  /* -------------------------------- Lighthouse tests ---------------------------- */
 
-// Tests if I can write a value (6) into the lighthouse
-  function testWrite() public {
+/* ----- Sample test cases of different lighthouse return values (int, decimal, string) ----- */
 
-    newlighthouse.write(dataValue, nonce);
+  /* Writes the current Amazon stock price ($1588.22 USD) into the lighthouse,
+     which should be interpreted as an integer with 18 decimal places
+     To get the stock value, take the value from the lighthouse, and divide by 1e18. */
+    function testWriteDecimal() public {
 
-    uint luckyNum = 0;
-    bool ok = false;
+      uint stockValue = 0x79656c6c6f77;  // Writes the value in Hex. Corresponds to 1588.22 as a decimal value
+      uint nonce = 1234;
+      newlighthouse.write(stockValue, nonce);
 
-    (luckyNum, ok) = newlighthouse.peekData();
+  // Checks that contracts are able to read an integer value from the lighthouse corresponding to the hex value written
+  // The value read here must be divided manually by 1e18 to obtain the stock price in order to be used
+      uint readValue = 0;
+      bool ok = false;
+      (readValue, ok) = newlighthouse.peekData();
 
-    Assert.equal(luckyNum, dataValue, "write failed");
-  }
+      Assert.equal(readValue, stockValue, "write failed");
+    }
 
+  /* Writes the current New York City temperature (34 degrees F) into the lighthouse */
+    function testWriteInt() public {
+
+      uint NYCtemp = 0x22; // Corresponds to 34 degrees as a decimal value
+      uint nonce = 1234;
+      newlighthouse.write(NYCtemp, nonce);
+
+      uint readValue = 0;
+      bool ok = false;
+      (readValue, ok) = newlighthouse.peekData();
+
+      Assert.equal(readValue, NYCtemp, "write failed");
+    }
+
+  /* Writes a random color (or any string) into the lighthouse,
+     which should be interpreted as a byte array representation of a color.
+     To get the color (or string), take the uint value from the lighthouse, convert it to hex, and then convert to a byte array.
+     *** The string derived can only be maximum of 16 ASCII characters */
+    function testWriteColor() public {
+
+      uint color = 0x626c7565;    // A hex representation of the color 'blue'
+      uint nonce = 1234;
+      newlighthouse.write(color, nonce);
+
+  // Checks that contracts are able to read an integer value from the lighthouse corresponding to the hex value written
+  // The value read here must be converted manually to a byte array representation of a string to be useful
+      uint readColor = 0;
+      bool ok = false;
+      (readColor, ok) = newlighthouse.peekData();
+
+      Assert.equal(readColor, color, "write failed");
+    }
+
+
+/* -------------------------------- Lighthouse tests ---------------------------- */
+
+  // Tests if I can write a dice value (6) into the lighthouse
+    function testWrite() public {
+
+  // Create the value and nonce we will be writing into the lighthouse
+      uint dataValue = 6;
+      uint nonce = 1234;
+
+      require(dataValue < 7, "Lighthouse dice roll outcome must be 1-6");
+      newlighthouse.write(dataValue, nonce);
+
+      uint luckyNum = 0;
+      bool ok = false;
+
+      (luckyNum, ok) = newlighthouse.peekData();
+
+      Assert.equal(luckyNum, dataValue, "write failed");
+    }
 
   /* -------------------------------- Ether Transfer tests ---------------------------- */
 
@@ -137,5 +193,6 @@ contract TestGamble{
       paid = false;
 
     }
+
 
 }
