@@ -23,8 +23,21 @@ Alice already has the casino functionality completed, and is waiting on you to p
 
 Create a directory where you would like to keep this project, and move inside it with your terminal. Run the truffle command `truffle unbox RhombusNetwork/tutorial`. Truffle should automatically unbox and the project and download it into your folder.
 
+**Comment**: _I run `truffle unbox RhombusNetwork/tutorial`. The `package.json` and `node_modules` are missing from the folder. The `package-lock.json` is empty. Without `node_modules`, it is clear that `truffle-config.js` will not run. This folder is not complete enough to be usable. Either complement the box or remove reference to it._
+
 Alternatively, visit the project's github link [here](https://github.com/RhombusNetwork/tutorial) and download the project files.
 
+**Comment**: _I clone from Github. The `package.json` and `node_modules` are also missing from the folder but the `package-lock.json` is populated. I created a package.json with `npm init -y` and manually added the dependencies. Then I created node_modules with `npm install`. Suggestion: add `package.json` in the github repository._
+
+**Comment**: _Although truffle-hdwallet-provider will be deprecated, FYI your github still works in my following development version configuration._
+
+```
+% truffle version
+Truffle v5.1.46 (core: 5.1.46)
+Solidity v0.5.16 (solc-js)
+Node v12.18.4
+Web3.js v1.2.1
+```
 
 ## Using a lighthouse oracle in the project
 
@@ -50,6 +63,13 @@ To obtain a value from an existing Rhombus lighthouse oracle, see the `Gamble.so
 ```javascript
 import "../contracts/Ilighthouse.sol";
 ```
+**Comment**: _I believe the following is also correct and is simpler._
+
+```javascript
+import "./Ilighthouse.sol";
+```
+
+
 2. The `Ilighthouse` file contains the interface for a Lighthouse Object. Now you can declare a global `ILighthouse` object in your `Gamble.sol` file. Add this to section 2.
 
 ```javascript
@@ -133,13 +153,17 @@ module.exports = {
 
 These are the deployment settings you need to get your project onto Rinkeby. The deployment settings for testing with a local Ganache chain is included as well. Note that you will need to have an Infura link and a wallet with Rinkeby ether to deploy the project.
 
+**Comment**: _I'd add to the sentence "...and a wallet with Rinkeby ether" to become "...and a wallet with Rinkeby ether_ **in the first account**"
+
 With this all set up, go to your terminal and run `truffle migrate --network rinkeby` to complete deployment. Congratulations, your project is now available for anyone to use!
 
 ## What's next?
 
-Now that you have completed this tutorial, you are ready to start using Rhombus lighthouse oracles and creating your own projects! We provide lighthouses that contain all kinds of information that may be useful to you, such as crypto prices, temperature, and random number generators like the one you used today. Check out all our oracles here (insert link)
+**Comment**: _There are 3 side notes made by the author that have not been filled. I put them in bold below._
 
-If you create an amazing project using one of our oracles and would like to share it with us, please do so here (add information, formats, email). Your project may even end up featured on our website and win a bounty prize! (ask jeff)
+Now that you have completed this tutorial, you are ready to start using Rhombus lighthouse oracles and creating your own projects! We provide lighthouses that contain all kinds of information that may be useful to you, such as crypto prices, temperature, and random number generators like the one you used today. Check out all our oracles here **(insert link)**
+
+If you create an amazing project using one of our oracles and would like to share it with us, please do so here **(add information, formats, email)**. Your project may even end up featured on our website and win a bounty prize! **(ask jeff)**
 
 Additionally, there are a few more things that could help you in your oracle development, listed below
 
